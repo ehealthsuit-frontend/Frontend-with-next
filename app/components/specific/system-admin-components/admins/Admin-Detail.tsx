@@ -1,113 +1,288 @@
+'use client';
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import { theme } from '@/styles/theme';
+
+// --- FORM STYLES ---
+const FormContainer = styled.div`
+  background: #fff;
+  border-radius: 16px;
+  padding: 40px 0;
+  max-width: 900px;
+  margin: 40px auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  min-height: 500px;
+`;
+
+const FormInner = styled.form`
+  width: 80%;
+  margin: 0 auto;
+`;
+
+const RequiredNote = styled.p`
+  color: #e57373;
+  font-size: 13px;
+  margin-bottom: 30px;
+`;
+
+const Red = styled.span`
+  color: #e74c3c;
+`;
+
+const Row = styled.div`
+  display: flex;
+  gap: 40px;
+  margin-bottom: 25px;
+`;
+
+const Group = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Label = styled.label`
+  font-size: 14px;
+  margin-bottom: 7px;
+  color: #222;
+`;
+
+const Input = styled.input`
+  padding: 12px 14px;
+  border: 1px solid #ececec;
+  border-radius: 5px;
+  background: #f7f8fa;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.2s;
+  &:focus {
+    border: 1.5px solid #bdbdbd;
+  }
+`;
+
+const Actions = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+`;
+
+const Button = styled.button`
+  background: #232323;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 14px 60px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover {
+    background: #444;
+  }
+`;
+// --- END FORM STYLES ---
+const AdminDetailForm = () => {
+  const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    companyName: '',
+    companyCode: '',
+    licenseNumber: '',
+    companyWebsite: '',
+    companyEmail: '',
+    contactNumber: '',
+    companyAddress: '',
+    description: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleNext = (e: React.FormEvent) => {
+    e.preventDefault();
+    setStep(2);
+  };
+
+  const handleBack = (e: React.FormEvent) => {
+    e.preventDefault();
+    setStep(1);
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Submit logic here
+    alert('Form submitted!\n' + JSON.stringify(formData, null, 2));
+  };
+
+  return (
+      <FormInner onSubmit={step === 1 ? handleNext : handleSubmit}>
+        <RequiredNote>
+          <Red>*</Red> All fields are required
+        </RequiredNote>
+        {step === 1 && (
+          <>
+            <Row>
+              <Group>
+                <Label>
+                  Company Name <Red>*</Red>
+                </Label>
+                <Input
+                  type="text"
+                  name="companyName"
+                  placeholder="Enter company name"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                  required
+                />
+              </Group>
+              <Group>
+                <Label>
+                  Company Code <Red>*</Red>
+                </Label>
+                <Input
+                  type="text"
+                  name="companyCode"
+                  placeholder="Enter company code"
+                  value={formData.companyCode}
+                  onChange={handleChange}
+                  required
+                />
+              </Group>
+            </Row>
+            <Row>
+              <Group>
+                <Label>
+                  License Number <Red>*</Red>
+                </Label>
+                <Input
+                  type="text"
+                  name="licenseNumber"
+                  placeholder="Enter company license number"
+                  value={formData.licenseNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </Group>
+              <Group>
+                <Label>
+                  Company Website
+                </Label>
+                <Input
+                  type="text"
+                  name="companyWebsite"
+                  placeholder="Enter company website address"
+                  value={formData.companyWebsite}
+                  onChange={handleChange}
+                />
+              </Group>
+            </Row>
+            <Actions>
+              <Button type="submit">Next</Button>
+            </Actions>
+          </>
+        )}
+        {step === 2 && (
+          <>
+            <Row>
+              <Group>
+                <Label>
+                  Company Email <Red>*</Red>
+                </Label>
+                <Input
+                  type="email"
+                  name="companyEmail"
+                  placeholder="Enter company address"
+                  value={formData.companyEmail}
+                  onChange={handleChange}
+                  required
+                />
+              </Group>
+              <Group>
+                <Label>
+                  Contact number <Red>*</Red>
+                </Label>
+                <Input
+                  type="text"
+                  name="contactNumber"
+                  placeholder="Enter contact number of the company"
+                  value={formData.contactNumber}
+                  onChange={handleChange}
+                  required
+                />
+              </Group>
+            </Row>
+            <Row>
+              <Group>
+                <Label>
+                  Company Address <Red>*</Red>
+                </Label>
+                <Input
+                  type="text"
+                  name="companyAddress"
+                  placeholder="Enter company Address"
+                  value={formData.companyAddress}
+                  onChange={handleChange}
+                  required
+                />
+              </Group>
+              <Group>
+                <Label>
+                  Description
+                </Label>
+                <Input
+                  type="text"
+                  name="description"
+                  placeholder="write description of the company"
+                  value={formData.description}
+                  onChange={handleChange}
+                />
+              </Group>
+            </Row>
+            <Actions>
+              <Button type="button" onClick={handleBack} style={{marginRight: 16}}>Back</Button>
+              <Button type="submit">Next</Button>
+            </Actions>
+          </>
+        )}
+      </FormInner>
+
+  );
+};
+
 // Insurance Admin Detail Page
 // Insurance company name
 
-'use client';
-import React from 'react';
-import Sidebar from '../common/Sidebar';
-import Header from '../../../common/Header';
+const AdminListsContainer = styled.div`
+  padding: ${theme.spacing.lg};
+  margin: 0 auto;
+  background: ${theme.colors.background};
+  border-radius: ${theme.borderRadius.md};
+  box-shadow: ${theme.shadows.sm};
+  height: 70%;
+  width: 90%;
+`;
+
+const Title = styled.h1`
+  color: ${theme.colors.textPrimary};
+  font-size: ${theme.typography.fontSizes.xl};
+  margin-bottom: ${theme.spacing.lg};
+  font-weight: ${theme.typography.fontWeights.semibold};
+`;
+
+const WelcomeMessage = styled.p`
+  color: ${theme.colors.textSecondary};
+  font-size: ${theme.typography.fontSizes.md};
+  margin-bottom: ${theme.spacing.xl};
+`;
 
 const AdminDetail = () => {
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Header />
-        <div className="flex-1 flex justify-center items-start py-12">
-          <div className="w-full max-w-4xl bg-white border-2 rounded-lg shadow-sm relative p-12">
-            <h2 className="text-2xl font-bold mb-8 text-gray-700">Insurance Company Name</h2>
-            <form className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-600">Company Name</label>
-                <input
-                  type="text"
-                  value="Health Insurance"
-                  disabled
-                  className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-600">Company Code</label>
-                <input
-                  type="text"
-                  value="EH"
-                  disabled
-                  className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-600">License Number</label>
-                <input
-                  type="text"
-                  value="TYC76329830"
-                  disabled
-                  className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-600">Company Website</label>
-                <input
-                  type="text"
-                  value="https://www.site.com"
-                  disabled
-                  className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-600">Company email</label>
-                <input
-                  type="email"
-                  value="healthinsurance@gmail.com"
-                  disabled
-                  className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-600">Contact Number</label>
-                <input
-                  type="text"
-                  value="+925789237895"
-                  disabled
-                  className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-600">Company Address</label>
-                <input
-                  type="text"
-                  value="DL, Ababe Street, Manila"
-                  disabled
-                  className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold mb-2 text-gray-600">Description</label>
-                <input
-                  type="text"
-                  value="Lorem ipsum quick/popup(eg PMA)."
-                  disabled
-                  className="w-full p-2 bg-gray-100 border border-gray-300 rounded text-gray-700 text-sm"
-                />
-              </div>
-              {/* Buttons */}
-              <div className="col-span-2 flex justify-center mt-8 gap-8">
-                <button
-                  type="button"
-                  className="bg-white text-red-600 border border-red-600 font-semibold py-2 px-12 rounded hover:bg-red-50 transition"
-                >
-                  Delete
-                </button>
-                <button
-                  type="button"
-                  className="bg-gray-800 text-white font-semibold py-2 px-12 rounded hover:bg-gray-900 transition"
-                >
-                  Edit
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+    <AdminListsContainer>
+      <Title>Admin Lists</Title>
+      <WelcomeMessage>
+        Welcome to the Health Insurance System Admin Detail
+      </WelcomeMessage>
+      <AdminDetailForm />
+    </AdminListsContainer>
   );
 };
 
