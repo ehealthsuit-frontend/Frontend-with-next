@@ -2,14 +2,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { theme } from '@/styles/theme';
-
+import AdminList from './Admin-list-Image';
 const AdminListsContainer = styled.div`
   padding: ${theme.spacing.lg};
   margin: 0 auto;
   background: ${theme.colors.background};
   border-radius: ${theme.borderRadius.md};
   box-shadow: ${theme.shadows.sm};
-  height: 70%;
+  height: 120%;
   width: 90%;
 `;
 
@@ -30,10 +30,11 @@ const AdminLists = () => {
   return (
     <AdminListsContainer>
       <Title>Admin Lists</Title>
-      <WelcomeMessage>
+      {/* <WelcomeMessage>
         Welcome to the Health Insurance System Admin Listssssssssssssss
-      </WelcomeMessage>
+      </WelcomeMessage> */}
       {/* Add your dashboard content here */}
+      <AdminList/>
     </AdminListsContainer>
   );
 };

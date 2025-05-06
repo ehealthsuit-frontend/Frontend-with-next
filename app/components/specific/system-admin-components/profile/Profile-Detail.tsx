@@ -2,14 +2,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { theme } from '@/styles/theme';
-
+import ProfileForm from './Profile-Edit';
 const ProfileDetailContainer = styled.div`
   padding: ${theme.spacing.lg};
   margin: 0 auto;
   background: ${theme.colors.background};
   border-radius: ${theme.borderRadius.md};
   box-shadow: ${theme.shadows.sm};
-  height: 70%;
+  height: 100%;
   width: 90%;
 `;
 
@@ -30,10 +30,9 @@ const ProfileDetail = () => {
   return (
     <ProfileDetailContainer>
       <Title>Profile Detail</Title>
-      <WelcomeMessage>
-        Welcome to the Health Insurance System Admin Profile Detail
-      </WelcomeMessage>
+
       {/* Add your dashboard content here */}
+      <ProfileForm/>
     </ProfileDetailContainer>
   );
 };

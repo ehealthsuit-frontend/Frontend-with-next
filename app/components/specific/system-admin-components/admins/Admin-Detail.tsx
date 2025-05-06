@@ -1,435 +1,669 @@
-'use client';
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { theme } from '@/styles/theme';
+// 'use client';
+// import React, { useState } from 'react';
+// import styled from 'styled-components';
+// import { theme } from '@/styles/theme';
 
-// --- FORM STYLES ---
-const FormContainer = styled.div`
-  background: #fff;
-  border-radius: 16px;
-  padding: 40px 0;
-  max-width: 900px;
-  margin: 40px auto;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  min-height: 500px;
-`;
+// // --- FORM STYLES ---
+// const FormContainer = styled.div`
+//   background: #fff;
+//   border-radius: 16px;
+//   padding: 40px 0;
+//   max-width: 900px;
+//   margin: 40px auto;
+//   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+//   min-height: 500px;
+// `;
 
-const FormInner = styled.form`
-  width: 80%;
-  margin: 0 auto;
-`;
+// const FormInner = styled.form`
+//   width: 80%;
+//   margin: 0 auto;
+// `;
 
-const RequiredNote = styled.p`
-  color: #e57373;
-  font-size: 13px;
-  margin-bottom: 30px;
-`;
+// const RequiredNote = styled.p`
+//   color: #e57373;
+//   font-size: 13px;
+//   margin-bottom: 30px;
+// `;
 
-const Red = styled.span`
-  color: #e74c3c;
-`;
+// const Red = styled.span`
+//   color: #e74c3c;
+// `;
 
-const Row = styled.div`
-  display: flex;
-  gap: 40px;
-  margin-bottom: 25px;
-`;
+// const Row = styled.div`
+//   display: flex;
+//   gap: 40px;
+//   margin-bottom: 25px;
+// `;
 
-const Group = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`;
+// const Group = styled.div`
+//   flex: 1;
+//   display: flex;
+//   flex-direction: column;
+// `;
 
-const Label = styled.label`
-  font-size: 14px;
-  margin-bottom: 7px;
-  color: #222;
-`;
+// const Label = styled.label`
+//   font-size: 14px;
+//   margin-bottom: 7px;
+//   color: #222;
+// `;
 
-const Input = styled.input`
-  padding: 12px 14px;
-  border: 1px solid #ececec;
-  border-radius: 5px;
-  background: #f7f8fa;
-  font-size: 15px;
-  outline: none;
-  transition: border 0.2s;
-  &:focus {
-    border: 1.5px solid #bdbdbd;
-  }
-`;
+// const Input = styled.input`
+//   padding: 12px 14px;
+//   border: 1px solid #ececec;
+//   border-radius: 5px;
+//   background: #f7f8fa;
+//   font-size: 15px;
+//   outline: none;
+//   transition: border 0.2s;
+//   &:focus {
+//     border: 1.5px solid #bdbdbd;
+//   }
+// `;
 
-const Actions = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 30px;
-`;
+// const Actions = styled.div`
+//   display: flex;
+//   justify-content: center;
+//   margin-top: 30px;
+// `;
 
-const Button = styled.button`
-  background: #232323;
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  padding: 14px 60px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: background 0.2s;
-  &:hover {
-    background: #444;
-  }
-`;
-// --- END FORM STYLES ---
+// const Button = styled.button`
+//   background: #232323;
+//   color: #fff;
+//   border: none;
+//   border-radius: 10px;
+//   padding: 14px 60px;
+//   font-size: 18px;
+//   cursor: pointer;
+//   transition: background 0.2s;
+//   &:hover {
+//     background: #444;
+//   }
+// `;
+// // --- END FORM STYLES ---
 
-type AdminDetailFormProps = {
-  step: number;
-  setStep: React.Dispatch<React.SetStateAction<number>>;
-};
+// type AdminDetailFormProps = {
+//   step: number;
+//   setStep: React.Dispatch<React.SetStateAction<number>>;
+// };
 
-const AdminDetailForm: React.FC<AdminDetailFormProps> = ({ step, setStep }) => {
-  const [formData, setFormData] = useState({
-    companyName: '',
-    companyCode: '',
-    licenseNumber: '',
-    companyWebsite: '',
-    companyEmail: '',
-    contactNumber: '',
-    companyAddress: '',
-    description: '',
-    // Step 3 fields
-    adminFirstName: '',
-    adminLastName: '',
-    adminUserName: '',
-    adminEmail: '',
-    adminPhone: '',
-    adminPassword: '',
-    adminConfirmPassword: '',
-    adminPhoto: null as File | null,
-  });
+// const AdminDetailForm: React.FC<AdminDetailFormProps> = ({ step, setStep }) => {
+//   const [formData, setFormData] = useState({
+//     companyName: '',
+//     companyCode: '',
+//     licenseNumber: '',
+//     companyWebsite: '',
+//     companyEmail: '',
+//     contactNumber: '',
+//     companyAddress: '',
+//     description: '',
+//     // Step 3 fields
+//     adminFirstName: '',
+//     adminLastName: '',
+//     adminUserName: '',
+//     adminEmail: '',
+//     adminPhone: '',
+//     adminPassword: '',
+//     adminConfirmPassword: '',
+//     adminPhoto: null as File | null,
+//   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
 
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setFormData({ ...formData, adminPhoto: e.target.files[0] });
-    }
-  };
+//   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     if (e.target.files && e.target.files[0]) {
+//       setFormData({ ...formData, adminPhoto: e.target.files[0] });
+//     }
+//   };
 
-  const handleNext = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep(step + 1);
-  };
+//   const handleNext = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     setStep(step + 1);
+//   };
 
-  const handleBack = (e: React.FormEvent) => {
-    e.preventDefault();
-    setStep(step - 1);
-  };
+//   const handleBack = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     setStep(step - 1);
+//   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Submit logic here
-    alert('Form submitted!\n' + JSON.stringify(formData, null, 2));
-  };
+//   const handleSubmit = (e: React.FormEvent) => {
+//     e.preventDefault();
+//     // Submit logic here
+//     alert('Form submitted!\n' + JSON.stringify(formData, null, 2));
+//   };
 
-  return (
+//   return (
+//     <>
+//       <div style={{ width: '100%', textAlign: 'center', marginBottom: 10 }}>
+//         <h1 style={{
+//           color: '#232323',
+//           fontSize: '2rem',
+//           fontWeight: 600,
+//           marginBottom: 8
+//         }}>
+//           {step === 3 ? 'Admin Credentials' : 'Create New Company'}
+//         </h1>
+//         <RequiredNote>
+//           <Red>*</Red> All fields are required
+//         </RequiredNote>
+//       </div>
+//       <FormInner onSubmit={step === 3 ? handleSubmit : handleNext}>
+//         {step === 1 && (
+//           <>
+//             <Row>
+//               <Group>
+//                 <Label>
+//                   Company Name <Red>*</Red>
+//                 </Label>
+//                 <Input
+//                   type="text"
+//                   name="companyName"
+//                   placeholder="Enter company name"
+//                   value={formData.companyName}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//               <Group>
+//                 <Label>
+//                   Company Code <Red>*</Red>
+//                 </Label>
+//                 <Input
+//                   type="text"
+//                   name="companyCode"
+//                   placeholder="Enter company code"
+//                   value={formData.companyCode}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//             </Row>
+//             <Row>
+//               <Group>
+//                 <Label>
+//                   License Number <Red>*</Red>
+//                 </Label>
+//                 <Input
+//                   type="text"
+//                   name="licenseNumber"
+//                   placeholder="Enter company license number"
+//                   value={formData.licenseNumber}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//               <Group>
+//                 <Label>
+//                   Company Website
+//                 </Label>
+//                 <Input
+//                   type="text"
+//                   name="companyWebsite"
+//                   placeholder="Enter company website address"
+//                   value={formData.companyWebsite}
+//                   onChange={handleChange}
+//                 />
+//               </Group>
+//             </Row>
+//             <Actions>
+//               <Button type="submit">Next</Button>
+//             </Actions>
+//           </>
+//         )}
+//         {step === 2 && (
+//           <>
+//             <Row>
+//               <Group>
+//                 <Label>
+//                   Company Email <Red>*</Red>
+//                 </Label>
+//                 <Input
+//                   type="email"
+//                   name="companyEmail"
+//                   placeholder="Enter company address"
+//                   value={formData.companyEmail}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//               <Group>
+//                 <Label>
+//                   Contact number <Red>*</Red>
+//                 </Label>
+//                 <Input
+//                   type="text"
+//                   name="contactNumber"
+//                   placeholder="Enter contact number of the company"
+//                   value={formData.contactNumber}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//             </Row>
+//             <Row>
+//               <Group>
+//                 <Label>
+//                   Company Address <Red>*</Red>
+//                 </Label>
+//                 <Input
+//                   type="text"
+//                   name="companyAddress"
+//                   placeholder="Enter company Address"
+//                   value={formData.companyAddress}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//               <Group>
+//                 <Label>
+//                   Description
+//                 </Label>
+//                 <Input
+//                   type="text"
+//                   name="description"
+//                   placeholder="write description of the company"
+//                   value={formData.description}
+//                   onChange={handleChange}
+//                 />
+//               </Group>
+//             </Row>
+//             <Actions>
+//               <Button type="button" onClick={handleBack} style={{marginRight: 16}}>Back</Button>
+//               <Button type="submit">Next</Button>
+//             </Actions>
+//           </>
+//         )}
+//         {step === 3 && (
+//           <>
+//             <div style={{ textAlign: 'center', marginBottom: 2, marginTop: 16 ,color: '#232323'}}>
+//               <label htmlFor="adminPhoto" style={{ cursor: 'pointer', display: 'inline-block' }}>
+//                 <div style={{
+//                   width: 60, height: 60, borderRadius: '50%',
+//                   background: '#f7f8fa', display: 'flex', alignItems: 'center', justifyContent: 'center',
+//                   margin: '0 auto 8px auto', fontSize: 32, color: '#3498db', border: '1.5px solid rgb(228, 31, 31)'
+//                 }}>
+//                   <span role="img" aria-label="camera">📷</span>
+//                 </div>
+//                 <div style={{ color: '#3498db', fontSize: 14 }}>Upload Photo</div>
+//                 <input
+//                   id="adminPhoto"
+//                   name="adminPhoto"
+//                   type="file"
+//                   accept="image/*"
+//                   style={{ display: 'none' }}
+//                   onChange={handlePhotoChange}
+//                 />
+//               </label>
+//             </div>
+//             <Row>
+//               <Group>
+//                 <Label>First Name <Red>*</Red></Label>
+//                 <Input
+//                   type="text"
+//                   name="adminFirstName"
+//                   placeholder="Enter admin first name"
+//                   value={formData.adminFirstName}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//               <Group>
+//                 <Label>Last Name <Red>*</Red></Label>
+//                 <Input
+//                   type="text"
+//                   name="adminLastName"
+//                   placeholder="Enter admin last name"
+//                   value={formData.adminLastName}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//             </Row>
+//             <Row>
+//               <Group>
+//                 <Label>User Name <Red>*</Red></Label>
+//                 <Input
+//                   type="text"
+//                   name="adminUserName"
+//                   placeholder="Enter admin user name"
+//                   value={formData.adminUserName}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//               <Group>
+//                 <Label>Email <Red>*</Red></Label>
+//                 <Input
+//                   type="email"
+//                   name="adminEmail"
+//                   placeholder="Enter admin email"
+//                   value={formData.adminEmail}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//             </Row>
+//             <Row>
+//               <Group>
+//                 <Label>Phone Number <Red>*</Red></Label>
+//                 <Input
+//                   type="text"
+//                   name="adminPhone"
+//                   placeholder="Enter admin phone number"
+//                   value={formData.adminPhone}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//               <Group>
+//                 <Label>Password <Red>*</Red></Label>
+//                 <Input
+//                   type="password"
+//                   name="adminPassword"
+//                   placeholder="Create password"
+//                   value={formData.adminPassword}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//             </Row>
+//             <Row>
+//               <Group>
+//                 <Label>Confirm Password <Red>*</Red></Label>
+//                 <Input
+//                   type="password"
+//                   name="adminConfirmPassword"
+//                   placeholder="Write password again"
+//                   value={formData.adminConfirmPassword}
+//                   onChange={handleChange}
+//                   required
+//                 />
+//               </Group>
+//               <Group />
+//             </Row>
+//             <Actions>
+//               <Button type="button" onClick={handleBack} style={{marginRight: 16, background: '#232323'}}>Back</Button>
+//               <Button type="submit" style={{ background: '#27ae60' }}>Create</Button>
+//             </Actions>
+//           </>
+//         )}
+//       </FormInner>
+//     </>
+//   );
+// };
 
-      <FormInner onSubmit={step === 3 ? handleSubmit : handleNext}>
-        {/* <RequiredNote>
-          <Red>*</Red> All fields are required
-        </RequiredNote> */}
-        {step === 1 && (
-          <>
-            <Row>
-              <Group>
-                <Label>
-                  Company Name <Red>*</Red>
-                </Label>
-                <Input
-                  type="text"
-                  name="companyName"
-                  placeholder="Enter company name"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-              <Group>
-                <Label>
-                  Company Code <Red>*</Red>
-                </Label>
-                <Input
-                  type="text"
-                  name="companyCode"
-                  placeholder="Enter company code"
-                  value={formData.companyCode}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-            </Row>
-            <Row>
-              <Group>
-                <Label>
-                  License Number <Red>*</Red>
-                </Label>
-                <Input
-                  type="text"
-                  name="licenseNumber"
-                  placeholder="Enter company license number"
-                  value={formData.licenseNumber}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-              <Group>
-                <Label>
-                  Company Website
-                </Label>
-                <Input
-                  type="text"
-                  name="companyWebsite"
-                  placeholder="Enter company website address"
-                  value={formData.companyWebsite}
-                  onChange={handleChange}
-                />
-              </Group>
-            </Row>
-            <Actions>
-              <Button type="submit">Next</Button>
-            </Actions>
-          </>
-        )}
-        {step === 2 && (
-          <>
-            <Row>
-              <Group>
-                <Label>
-                  Company Email <Red>*</Red>
-                </Label>
-                <Input
-                  type="email"
-                  name="companyEmail"
-                  placeholder="Enter company address"
-                  value={formData.companyEmail}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-              <Group>
-                <Label>
-                  Contact number <Red>*</Red>
-                </Label>
-                <Input
-                  type="text"
-                  name="contactNumber"
-                  placeholder="Enter contact number of the company"
-                  value={formData.contactNumber}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-            </Row>
-            <Row>
-              <Group>
-                <Label>
-                  Company Address <Red>*</Red>
-                </Label>
-                <Input
-                  type="text"
-                  name="companyAddress"
-                  placeholder="Enter company Address"
-                  value={formData.companyAddress}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-              <Group>
-                <Label>
-                  Description
-                </Label>
-                <Input
-                  type="text"
-                  name="description"
-                  placeholder="write description of the company"
-                  value={formData.description}
-                  onChange={handleChange}
-                />
-              </Group>
-            </Row>
-            <Actions>
-              <Button type="button" onClick={handleBack} style={{marginRight: 16}}>Back</Button>
-              <Button type="submit">Next</Button>
-            </Actions>
-          </>
-        )}
-  
-        {step === 3 && (
-          <>
-            <div style={{ textAlign: 'center', marginBottom: 2, marginTop: 16 ,color: '#232323'}}>
-              <label htmlFor="adminPhoto" style={{ cursor: 'pointer', display: 'inline-block' }}>
-                <div style={{
-                  width: 60, height: 60, borderRadius: '50%',
-                  background: '#f7f8fa', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  margin: '0 auto 8px auto', fontSize: 32, color: '#3498db', border: '1.5px solid rgb(228, 31, 31)'
-                }}>
-                  <span role="img" aria-label="camera">📷</span>
-                </div>
-                <div style={{ color: '#3498db', fontSize: 14 }}>Upload Photo</div>
-                <input
-                  id="adminPhoto"
-                  name="adminPhoto"
-                  type="file"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={handlePhotoChange}
-                />
-              </label>
-            </div>
-            <Row>
-              <Group>
-                <Label>First Name <Red>*</Red></Label>
-                <Input
-                  type="text"
-                  name="adminFirstName"
-                  placeholder="Enter admin first name"
-                  value={formData.adminFirstName}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-              <Group>
-                <Label>Last Name <Red>*</Red></Label>
-                <Input
-                  type="text"
-                  name="adminLastName"
-                  placeholder="Enter admin last name"
-                  value={formData.adminLastName}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-            </Row>
-            <Row>
-              <Group>
-                <Label>User Name <Red>*</Red></Label>
-                <Input
-                  type="text"
-                  name="adminUserName"
-                  placeholder="Enter admin user name"
-                  value={formData.adminUserName}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-              <Group>
-                <Label>Email <Red>*</Red></Label>
-                <Input
-                  type="email"
-                  name="adminEmail"
-                  placeholder="Enter admin email"
-                  value={formData.adminEmail}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-            </Row>
-            <Row>
-              <Group>
-                <Label>Phone Number <Red>*</Red></Label>
-                <Input
-                  type="text"
-                  name="adminPhone"
-                  placeholder="Enter admin phone number"
-                  value={formData.adminPhone}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-              <Group>
-                <Label>Password <Red>*</Red></Label>
-                <Input
-                  type="password"
-                  name="adminPassword"
-                  placeholder="Create password"
-                  value={formData.adminPassword}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-            </Row>
-            <Row>
-              <Group>
-                <Label>Confirm Password <Red>*</Red></Label>
-                <Input
-                  type="password"
-                  name="adminConfirmPassword"
-                  placeholder="Write password again"
-                  value={formData.adminConfirmPassword}
-                  onChange={handleChange}
-                  required
-                />
-              </Group>
-              <Group />
-            </Row>
-            <Actions>
-              <Button type="button" onClick={handleBack} style={{marginRight: 16, background: '#232323'}}>Back</Button>
-              <Button type="submit" style={{ background: '#27ae60' }}>Create</Button>
-            </Actions>
-          </>
-        )}
-      </FormInner>
+// // Insurance Admin Detail Page
+// // Insurance company name
 
-  );
-};
-
-// Insurance Admin Detail Page
-// Insurance company name
-
-// const AdminListsContainer = styled.div`
+// // const AdminListsContainer = styled.div`
+// //   padding: ${theme.spacing.lg};
+// //   margin: 0 auto;
+// //   background: ${theme.colors.background};
+// //   border-radius: ${theme.borderRadius.md};
+// //   box-shadow: ${theme.shadows.sm};
+// //   height: 70%;
+// //   width: 90%;
+// // `;
+// const AdminListsContainer = styled.div<{ isStepThree?: boolean }>`
 //   padding: ${theme.spacing.lg};
 //   margin: 0 auto;
 //   background: ${theme.colors.background};
 //   border-radius: ${theme.borderRadius.md};
 //   box-shadow: ${theme.shadows.sm};
-//   height: 70%;
 //   width: 90%;
+//   height: ${({ isStepThree }) => (isStepThree ? '110%' : '70%')};
 // `;
-const AdminListsContainer = styled.div<{ isStepThree?: boolean }>`
-  padding: ${theme.spacing.lg};
-  margin: 0 auto;
-  background: ${theme.colors.background};
-  border-radius: ${theme.borderRadius.md};
-  box-shadow: ${theme.shadows.sm};
-  width: 90%;
-  height: ${({ isStepThree }) => (isStepThree ? '110%' : '70%')};
+// const Title = styled.h1`
+//   color: ${theme.colors.textPrimary};
+//   font-size: ${theme.typography.fontSizes.xl};
+//   margin-bottom: ${theme.spacing.lg};
+//   font-weight: ${theme.typography.fontWeights.semibold};
+// `;
+
+// const WelcomeMessage = styled.p`
+//   color: ${theme.colors.textSecondary};
+//   font-size: ${theme.typography.fontSizes.md};
+//   margin-bottom: ${theme.spacing.xl};
+// `;
+
+// const AdminDetail = () => {
+//   const [step, setStep] = useState(1);
+
+//   return (
+//     <AdminListsContainer isStepThree={step === 3}>
+//       <Title>Admin Lists</Title>
+//       <WelcomeMessage>
+//         Welcome to the Health Insurance System Admin Detail
+//       </WelcomeMessage>
+//       <AdminDetailForm step={step} setStep={setStep} />
+//     </AdminListsContainer>
+//   );
+// };
+
+// export default AdminDetail;
+// to the new insurance company
+import React from 'react';
+import styled from 'styled-components';
+
+// --- STYLES ---
+const Container = styled.div`
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 24px;
 `;
+
+const HeaderRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+`;
+
 const Title = styled.h1`
-  color: ${theme.colors.textPrimary};
-  font-size: ${theme.typography.fontSizes.xl};
-  margin-bottom: ${theme.spacing.lg};
-  font-weight: ${theme.typography.fontWeights.semibold};
+  font-size: 2rem;
+  font-weight: 600;
+  color: #232323;
+  margin: 0;
 `;
 
-const WelcomeMessage = styled.p`
-  color: ${theme.colors.textSecondary};
-  font-size: ${theme.typography.fontSizes.md};
-  margin-bottom: ${theme.spacing.xl};
+const CreateButton = styled.button`
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  &:hover {
+    background: #219150;
+  }
 `;
 
-const AdminDetail = () => {
-  const [step, setStep] = useState(1);
+const FilterBar = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+`;
 
-  return (
-    <AdminListsContainer isStepThree={step === 3}>
-      <Title>Admin Lists</Title>
-      <WelcomeMessage>
-        Welcome to the Health Insurance System Admin Detail
-      </WelcomeMessage>
-      <AdminDetailForm step={step} setStep={setStep} />
-    </AdminListsContainer>
-  );
-};
+const FilterIcon = styled.span`
+  font-size: 1.2rem;
+  color: #232323;
+  background: #f7f8fa;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+`;
+
+const FilterDropdown = styled.select`
+  background: #f7f8fa;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  color: #232323;
+  outline: none;
+  cursor: pointer;
+`;
+
+const TableWrapper = styled.div`
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  overflow-x: auto;
+`;
+
+const Table = styled.table`
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+`;
+
+const Th = styled.th`
+  text-align: left;
+  padding: 16px 12px;
+  color: #232323;
+  font-weight: 600;
+  background: #f7f8fa;
+  font-size: 1rem;
+`;
+
+const Td = styled.td`
+  padding: 14px 12px;
+  color: #232323;
+  font-size: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+`;
+
+const StatusBadge = styled.span<{ status: string }>`
+  display: inline-block;
+  padding: 6px 18px;
+  border-radius: 8px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: ${({ status }) =>
+    status === 'Active'
+      ? '#27ae60'
+      : status === 'Inactive'
+      ? '#e74c3c'
+      : '#f39c12'};
+  background: ${({ status }) =>
+    status === 'Active'
+      ? '#eafaf1'
+      : status === 'Inactive'
+      ? '#fdeeee'
+      : '#fff8e1'};
+`;
+
+// --- SAMPLE DATA ---
+const companies = [
+  {
+    id: '00001',
+    name: 'Christine Brooks',
+    address: '889 Kutch Green Apt. 448',
+    created: '14 Feb 2019',
+    license: '678789',
+    status: 'Active',
+  },
+  {
+    id: '00002',
+    name: 'Rosie Pearson',
+    address: '979 Immanuel Ferry Suite 526',
+    created: '14 Feb 2019',
+    license: 'TU789',
+    status: 'Active',
+  },
+  {
+    id: '00003',
+    name: 'Darrell Caldwell',
+    address: '8567 Frida Ports',
+    created: '14 Feb 2019',
+    license: 'YU78976',
+    status: 'Inactive',
+  },
+  {
+    id: '00004',
+    name: 'Gilbert Johnston',
+    address: '788 Destiny Lake Suite 800',
+    created: '14 Feb 2019',
+    license: '587898',
+    status: 'Active',
+  },
+  {
+    id: '00005',
+    name: 'Alan Cain',
+    address: '042 Mayme Throughway',
+    created: '14 Feb 2019',
+    license: 'YU7899',
+    status: 'Inactive',
+  },
+  {
+    id: '00006',
+    name: 'Alfred Murray',
+    address: '543 Weimann Mountain',
+    created: '14 Feb 2019',
+    license: 'NM56779',
+    status: 'Active',
+  },
+];
+
+// --- COMPONENT ---
+const AdminDetail: React.FC = () => (
+  <Container>
+    <HeaderRow>
+      <Title>Insurance Companies</Title>
+      <CreateButton>Create New Company</CreateButton>
+    </HeaderRow>
+    <FilterBar>
+      <FilterIcon>💡</FilterIcon>
+      <FilterDropdown>
+        <option>Filter By</option>
+        <option>Created Date</option>
+      </FilterDropdown>
+      <FilterDropdown>
+        <option>Company Address</option>
+        <option>Address 1</option>
+        <option>Address 2</option>
+      </FilterDropdown>
+      <FilterDropdown>
+        <option>Company Status</option>
+        <option>Active</option>
+        <option>Inactive</option>
+      </FilterDropdown>
+    </FilterBar>
+    <TableWrapper>
+      <Table>
+        <thead>
+          <tr>
+            <Th>ID</Th>
+            <Th>NAME</Th>
+            <Th>ADDRESS</Th>
+            <Th>CREATED DATE</Th>
+            <Th>LICENSE NUMBER</Th>
+            <Th>STATUS</Th>
+          </tr>
+        </thead>
+        <tbody>
+          {companies.map((c) => (
+            <tr key={c.id}>
+              <Td>{c.id}</Td>
+              <Td>{c.name}</Td>
+              <Td>{c.address}</Td>
+              <Td>{c.created}</Td>
+              <Td>{c.license}</Td>
+              <Td>
+                <StatusBadge status={c.status}>{c.status}</StatusBadge>
+              </Td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
+    </TableWrapper>
+  </Container>
+);
 
 export default AdminDetail;
